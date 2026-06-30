@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Biologie – Concours Médecine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+        header {
+            background: linear-gradient(135deg, #1d4ed8, #0f766e);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        header p {
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+        }
+        main {
+            max-width: 1100px;
+            margin: 1.5rem auto;
+            padding: 0 1rem 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+            gap: 1.5rem;
+        }
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .card {
+            background: #020617;
+            border-radius: 0.75rem;
+            border: 1px solid #1f2937;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.78);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: #bfdbfe;
+        }
+        .card h3 {
+            margin-top: 1.2rem;
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
+            color: #93c5fd;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            background: #1e293b;
+            color: #e5e7eb;
+            margin-right: 0.4rem;
+        }
+        .chapters-list button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 0.4rem;
+            padding: 0.5rem 0.7rem;
+            border-radius: 0.45rem;
+            border: 1px solid #1f2937;
+            background: #020617;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .chapters-list button.active {
+            background: #1d4ed8;
+            border-color: #3b82f6;
+        }
+        .chapters-list button span {
+            display: block;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .course-section {
+            margin-bottom: 0.75rem;
+        }
+        .course-section ul {
+            padding-left: 1.1rem;
+            margin-top: 0.2rem;
+            font-size: 0.9rem;
+        }
+        .course-section li {
+            margin-bottom: 0.15rem;
+        }
+
+        .question {
+            margin-bottom: 0.9rem;
+            padding: 0.65rem 0.8rem;
+            border-radius: 0.6rem;
+            border: 1px solid #1f2937;
+            background: #020617;
+        }
+        .question h4 {
+            margin: 0 0 0.35rem;
+            font-size: 0.95rem;
+            color: #e5e7eb;
+        }
+        .question small {
+            color: #9ca3af;
+        }
+        .options {
+            margin-top: 0.35rem;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .options input[type="radio"] {
+            margin-right: 0.35rem;
+        }
+
+        .controls {
+            margin-top: 0.7rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        button.primary {
+            padding: 0.45rem 0.9rem;
+            border-radius: 0.45rem;
+            border: none;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        button.outline {
+            padding: 0.45rem 0.9rem;
+            border-radius: 0.45rem;
+            border: 1px solid #4b5563;
+            background: transparent;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .result {
+            margin-top: 0.7rem;
+            font-size: 0.9rem;
+        }
+        .result span {
+            display: block;
+        }
+        .ok {
+            color: #22c55e;
+        }
+        .bad {
+            color: #f97316;
+        }
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Biologie – Concours Médecine</h1>
+    <p>Analyse des cours + QCM en ligne, système QCU (une seule bonne réponse) pour s'entraîner au concours.</p>
+</header>
+
+<main>
+    <div class="grid">
+        <!-- Colonne gauche : cours + chapitres -->
+        <section class="card">
+            <h2>Chapitres de biologie</h2>
+            <p style="font-size:0.9rem;">
+                Programme inspiré du bac Sciences Expérimentales (SVT) utilisé pour le concours commun Médecine/Pharmacie/Med Dentaire au Maroc. 
+                Sélectionne un chapitre pour voir le résumé de cours et les QCM associés.
+            </p>
+
+            <div class="chapters-list">
+                <button data-chapter="cellule" class="active">
+                    Biologie cellulaire
+                    <span>Structure, membranes, organites, cycle cellulaire.</span>
+                </button>
+                <button data-chapter="genetique">
+                    Génétique et hérédité
+                    <span>ADN, gènes, mitose/méiose, transmission des caractères.</span>
+                </button>
+                <button data-chapter="physio">
+                    Physiologie humaine
+                    <span>Systèmes nerveux, endocrinien, cardio‑vasculaire, respiratoire, digestif.</span>
+                </button>
+                <button data-chapter="immuno">
+                    Immunologie de base
+                    <span>Immunité innée/adaptative, anticorps, vaccination.</span>
+                </button>
+                <button data-chapter="microbio">
+                    Microbiologie
+                    <span>Virus, bactéries, notions de base sur les agents infectieux.</span>
+                </button>
+                <button data-chapter="repro">
+                    Reproduction et développement
+                    <span>Reproduction humaine, gamétogenèse, embryologie simple.</span>
+                </button>
+                <button data-chapter="ecologie">
+                    Écologie et biosphère
+                    <span>Population, écosystème, flux de matière et énergie.</span>
+                </button>
+            </div>
+
+            <hr style="margin:1rem 0;border-color:#1f2937;">
+
+            <div id="course-content">
+                <!-- contenu généré en JS -->
+            </div>
+        </section>
+
+        <!-- Colonne droite : QCM -->
+        <section class="card">
+            <h2>QCM du chapitre sélectionné</h2>
+            <p style="font-size:0.9rem;">
+                Réponds aux questions puis clique sur « Corriger » pour voir ton score, les bonnes réponses et tes erreurs. 
+                Tu peux réinitialiser pour refaire le test.
+            </p>
+
+            <div id="questions-container"></div>
+
+            <div class="controls">
+                <button class="primary" id="check-btn">Corriger le QCM</button>
+                <button class="outline" id="reset-btn">Tout réinitialiser</button>
+            </div>
+
+            <div class="result hidden" id="result">
+                <span id="score"></span>
+                <span id="details"></span>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer>
+    Site statique créé pour l'entraînement en biologie – concours médecine. 
+    Tu peux héberger ce fichier sur GitHub Pages, Netlify, etc., et partager le lien avec tes collègues.
+</footer>
+
+<script>
+    // --- Données de cours (résumé/analyse) ---
+    const courses = {
+        cellule: `
+            <div class="course-section">
+                <h3>Objectifs du chapitre</h3>
+                <ul>
+                    <li>Distinguer cellule eucaryote et procaryote.</li>
+                    <li>Connaître les principaux organites (noyau, mitochondries, RE, appareil de Golgi, lysosomes).</li>
+                    <li>Comprendre le rôle de la membrane plasmique et le transport membranaire (diffusion, osmose, transport actif).</li>
+                    <li>Maîtriser les grandes étapes du cycle cellulaire (interphase, mitose).</li>
+                </ul>
+            </div>
+            <div class="course-section">
+                <h3>Points clés pour le concours</h3>
+                <ul>
+                    <li>La mitochondrie est le siège principal de la respiration cellulaire.</li>
+                    <li>La mitose assure la reproduction conforme des cellules somatiques.</li>
+                    <li>La membrane plasmique est une bicouche de phospholipides contenant des protéines.</li>
+                    <li>Les transports passifs ne nécessitent pas d'énergie, contrairement au transport actif.</li>
+                </ul>
+            </div>
+        `,
+        genetique: `
+            <div class="course-section">
+                <h3>Objectifs du chapitre</h3>
+                <ul>
+                    <li>Comprendre la structure de l'ADN et son rôle de support de l'information génétique.</li>
+                    <li>Distinguer mitose et méiose et leurs rôles dans l’organisme.</li>
+                    <li>Appliquer les lois de Mendel pour prévoir la transmission des caractères.</li>
+                    <li>Saisir les notions de gène, allèle, génotype, phénotype.</li>
+                </ul>
+            </div>
+            <div class="course-section">
+                <h3>Points clés pour le concours</h3>
+                <ul>
+                    <li>L’ADN est une double hélice constituée de nucl&eacute;otides (A, T, C, G).</li>
+                    <li>La méiose réduit de moitié le nombre de chromosomes et crée la diversité génétique.</li>
+                    <li>Un gène peut posséder plusieurs allèles, dominants ou récessifs.</li>
+                    <li>Les croisements de type monohybride et dihybride sont très fréquents dans les QCM.</li>
+                </ul>
+            </div>
+        `,
+        physio: `
+            <div class="course-section">
+                <h3>Objectifs du chapitre</h3>
+                <ul>
+                    <li>Connaître les grandes fonctions de l’organisme (respiration, circulation, digestion, excrétion).</li>
+                    <li>Comprendre l’organisation du système nerveux et endrocrinien.</li>
+                    <li>Décrire la circulation sanguine et le rôle du cœur.</li>
+                    <li>Identifier les principales hormones et leurs organes cibles.</li>
+                </ul>
+            </div>
+            <div class="course-section">
+                <h3>Points clés pour le concours</h3>
+                <ul>
+                    <li>Le cœur fonctionne comme une pompe double : circulation pulmonaire et systémique.</li>
+                    <li>Les alvéoles pulmonaires sont le site des échanges gazeux.</li>
+                    <li>Le système nerveux autonome régule les fonctions involontaires (fréquence cardiaque, digestion...).</li>
+                    <li>Les hormones thyroïdiennes influencent le métabolisme de base.</li>
+                </ul>
+            </div>
+        `,
+        immuno: `
+            <div class="course-section">
+                <h3>Objectifs du chapitre</h3>
+                <ul>
+                    <li>Distinguer immunité innée et immunité adaptative.</li>
+                    <li>Comprendre le rôle des lymphocytes B et T.</li>
+                    <li>Connaître la structure et le rôle des anticorps.</li>
+                    <li>Expliquer le principe de la vaccination.</li>
+                </ul>
+            </div>
+            <div class="course-section">
+                <h3>Points clés pour le concours</h3>
+                <ul>
+                    <li>L’immunité innée est rapide, non spécifique, et présente dès la naissance.</li>
+                    <li>L’immunité adaptative est spécifique et possède une mémoire immunologique.</li>
+                    <li>Les lymphocytes B produisent des anticorps, les lymphocytes T assurent la cytotoxicité et la régulation.</li>
+                    <li>La vaccination repose sur la mémoire immunitaire pour protéger contre une infection future.</li>
+                </ul>
+            </div>
+        `,
+        microbio: `
+            <div class="course-section">
+                <h3>Objectifs du chapitre</h3>
+                <ul>
+                    <li>Distinguer virus, bactéries, champignons microscopiques.</li>
+                    <li>Connaître les grandes caractéristiques des bactéries (paroi, reproduction, nutrition).</li>
+                    <li>Comprendre le mode d’infection des virus et leur dépendance à la cellule hôte.</li>
+                    <li>Identifier des notions de base sur les antibiotiques et la résistance.</li>
+                </ul>
+            </div>
+            <div class="course-section">
+                <h3>Points clés pour le concours</h3>
+                <ul>
+                    <li>Les virus sont des parasites intracellulaires obligatoires.</li>
+                    <li>Les bactéries peuvent être Gram+ ou Gram‑ selon la structure de leur paroi.</li>
+                    <li>Les antibiotiques sont inefficaces contre les virus.</li>
+                    <li>L’usage abusif d’antibiotiques favorise l’apparition de bactéries résistantes.</li>
+                </ul>
+            </div>
+        `,
+        repro: `
+            <div class="course-section">
+                <h3>Objectifs du chapitre</h3>
+                <ul>
+                    <li>Décrire les organes reproducteurs mâles et femelles.</li>
+                    <li>Comprendre la gamétogenèse (spermatogenèse, ovogenèse).</li>
+                    <li>Connaître les grandes étapes du cycle menstruel.</li>
+                    <li>Présenter les premières étapes du développement embryonnaire.</li>
+                </ul>
+            </div>
+            <div class="course-section">
+                <h3>Points clés pour le concours</h3>
+                <ul>
+                    <li>La méiose permet la formation des gamètes haploïdes.</li>
+                    <li>Le cycle ovarien et le cycle utérin sont coordonnés par les hormones sexuelles.</li>
+                    <li>La fécondation correspond à la fusion d’un spermatozoïde et d’un ovule.</li>
+                    <li>La nidation est l’implantation du blastocyste dans la muqueuse utérine.</li>
+                </ul>
+            </div>
+        `,
+        ecologie: `
+            <div class="course-section">
+                <h3>Objectifs du chapitre</h3>
+                <ul>
+                    <li>Distinguer population, communauté, écosystème.</li>
+                    <li>Comprendre les flux d’énergie dans les réseaux trophiques.</li>
+                    <li>Connaître le cycle de quelques éléments (carbone, azote) à un niveau simple.</li>
+                    <li>Appréhender les impacts de l’activité humaine sur les écosystèmes.</li>
+                </ul>
+            </div>
+            <div class="course-section">
+                <h3>Points clés pour le concours</h3>
+                <ul>
+                    <li>Dans un écosystème, l’énergie circule des producteurs vers les consommateurs puis les décomposeurs.</li>
+                    <li>La biodiversité est un indicateur important de la santé d’un écosystème.</li>
+                    <li>Les activités humaines peuvent provoquer pollution, fragmentation des habitats et disparition d’espèces.</li>
+                    <li>Les schémas de chaînes alimentaires et pyramides trophiques sont fréquents en QCM.</li>
+                </ul>
+            </div>
+        `
+    };
+
+    // --- QCM par chapitre ---
+    // Pour aller vers 250 questions, duplique la structure suivante et ajoute des questions dans chaque tableau.
+    const questionsBank = {
+        cellule: [
+            {
+                text: "La mitochondrie est principalement responsable de :",
+                options: [
+                    "La synthèse des protéines",
+                    "La photosynthèse",
+                    "La respiration cellulaire",
+                    "La digestion cellulaire",
+                    "La division de la cellule"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "La membrane plasmique est principalement constituée de :",
+                options: [
+                    "Cellulose et chitine",
+                    "Protéines et polysaccharides",
+                    "Une bicouche de phospholipides et des protéines",
+                    "ADN et ARN",
+                    "Acides gras libres uniquement"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "La mitose permet :",
+                options: [
+                    "La formation des gamètes",
+                    "La réduction du nombre de chromosomes de moitié",
+                    "La reproduction conforme des cellules somatiques",
+                    "La recombinaison génétique",
+                    "Le passage de l'état haploïde à diploïde"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "Le transport passif à travers la membrane :",
+                options: [
+                    "Nécessite toujours de l'ATP",
+                    "Se fait contre le gradient de concentration",
+                    "Inclut la diffusion simple et facilitée",
+                    "Ne concerne que l'eau",
+                    "N'existe pas chez les cellules animales"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "Le lysosome est un organite spécialisé dans :",
+                options: [
+                    "La production d'ATP",
+                    "La digestion intracellulaire",
+                    "La synthèse des lipides",
+                    "La traduction de l'ARNm",
+                    "La photosynthèse"
+                ],
+                correctIndex: 1
+            }
+        ],
+        genetique: [
+            {
+                text: "La molécule d'ADN est constituée d'une double hélice de :",
+                options: [
+                    "Polypeptides",
+                    "Nucléotides",
+                    "Monosaccharides",
+                    "Acides gras",
+                    "Lipides complexes"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "La méiose se caractérise par :",
+                options: [
+                    "Une seule division et la conservation du nombre de chromosomes",
+                    "Deux divisions successives et la réduction du nombre de chromosomes de moitié",
+                    "La formation de cellules identiques entre elles",
+                    "La synthèse d'ARN ribosomique",
+                    "La duplication des chromosomes sans divisions"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Un allèle dominant :",
+                options: [
+                    "Ne s'exprime jamais",
+                    "S'exprime seulement chez l'homozygote",
+                    "Masque l'expression de l'allèle récessif en hétérozygote",
+                    "Est toujours délétère",
+                    "N'existe que chez les végétaux"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "Dans un croisement monohybride, on étudie :",
+                options: [
+                    "Deux caractères à la fois",
+                    "Un seul caractère",
+                    "Trois caractères",
+                    "Uniquement le sexe des individus",
+                    "Uniquement les groupes sanguins"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Le phénotype correspond :",
+                options: [
+                    "À la composition en ADN d'un individu",
+                    "Au message génétique porté par un gène",
+                    "Aux caractères observables d'un individu",
+                    "Au nombre de chromosomes",
+                    "À la quantité d'ARN dans la cellule"
+                ],
+                correctIndex: 2
+            }
+        ],
+        physio: [
+            {
+                text: "Les alvéoles pulmonaires sont le siège principal :",
+                options: [
+                    "De la filtration du sang",
+                    "Des échanges gazeux entre air et sang",
+                    "De la production de bile",
+                    "De la digestion des protéines",
+                    "De la synthèse des hormones"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Le cœur comprend :",
+                options: [
+                    "Deux cavités : un ventricule et une oreillette",
+                    "Quatre cavités : deux oreillettes et deux ventricules",
+                    "Trois cavités : deux oreillettes et un ventricule",
+                    "Une seule cavité",
+                    "Six cavités"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Le système nerveux autonome régule :",
+                options: [
+                    "Uniquement les mouvements volontaires",
+                    "Les fonctions involontaires (fréquence cardiaque, digestion...)",
+                    "La synthèse de l'ADN",
+                    "La vision et l'audition",
+                    "La croissance osseuse seulement"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les hormones thyroïdiennes influencent principalement :",
+                options: [
+                    "La coagulation sanguine",
+                    "Le métabolisme de base",
+                    "La mémoire à court terme",
+                    "La perception de la douleur",
+                    "La fécondation"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Le sang circule des artères vers :",
+                options: [
+                    "Les veines, puis les capillaires",
+                    "Les capillaires, puis les veines",
+                    "Le cœur directement",
+                    "Les poumons uniquement",
+                    "La lymphe"
+                ],
+                correctIndex: 1
+            }
+        ],
+        immuno: [
+            {
+                text: "L'immunité innée se caractérise par :",
+                options: [
+                    "Une réponse spécifique et mémoire durable",
+                    "Une réponse rapide et non spécifique",
+                    "L'absence de cellules impliquées",
+                    "Une production exclusive d'anticorps",
+                    "Une action uniquement contre les virus"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les lymphocytes B sont responsables principalement de :",
+                options: [
+                    "La production d'anticorps",
+                    "La phagocytose",
+                    "La destruction des parasites par perforation",
+                    "La synthèse de globules rouges",
+                    "La sécrétion de bile"
+                ],
+                correctIndex: 0
+            },
+            {
+                text: "La vaccination repose sur :",
+                options: [
+                    "La suppression définitive du système immunitaire",
+                    "L'induction d'une mémoire immunitaire spécifique",
+                    "La destruction des anticorps",
+                    "La diminution du nombre de leucocytes",
+                    "La modification du code génétique du patient"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Un anticorps est :",
+                options: [
+                    "Une cellule spécialisée",
+                    "Un type de lipide",
+                    "Une protéine sérique spécifique d'un antigène",
+                    "Un acide nucléique",
+                    "Un glucide complexe"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "Les lymphocytes T cytotoxiques :",
+                options: [
+                    "Produisent la bile",
+                    "Destructent les cellules infectées ou anormales",
+                    "Synthétisent l'hémoglobine",
+                    "Assurent la phagocytose des bactéries",
+                    "Produisent uniquement des anticorps IgE"
+                ],
+                correctIndex: 1
+            }
+        ],
+        microbio: [
+            {
+                text: "Les virus sont des :",
+                options: [
+                    "Organismes unicellulaires autonomes",
+                    "Parasites intracellulaires obligatoires",
+                    "Bactéries Gram+",
+                    "Champignons pluricellulaires",
+                    "Protéines sériques"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les antibiotiques agissent principalement sur :",
+                options: [
+                    "Les virus",
+                    "Les bactéries",
+                    "Les hormones",
+                    "Les globules rouges",
+                    "Les anticorps"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "La résistance bactérienne aux antibiotiques est favorisée par :",
+                options: [
+                    "Un usage adapté et contrôlé",
+                    "L'absence totale d'antibiotiques",
+                    "L'abus et l'utilisation inappropriée des antibiotiques",
+                    "La vaccination",
+                    "La consommation de vitamines uniquement"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "Une bactérie Gram+ se distingue d'une Gram‑ principalement par :",
+                options: [
+                    "Son type d'ADN",
+                    "La structure de sa paroi cellulaire",
+                    "Sa capacité à produire de l'oxygène",
+                    "Son mode de reproduction",
+                    "Son contenu en eau"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les champignons microscopiques peuvent être :",
+                options: [
+                    "Uniquement des agents non pathogènes",
+                    "Des parasites ou des saprophytes",
+                    "Uniquement des virus",
+                    "Uniquement des bactéries",
+                    "Des globules rouges modifiés"
+                ],
+                correctIndex: 1
+            }
+        ],
+        repro: [
+            {
+                text: "La gamétogenèse correspond :",
+                options: [
+                    "À la formation des hormones",
+                    "À la formation des gamètes par méiose",
+                    "À la mitose des cellules somatiques",
+                    "À la synthèse des protéines",
+                    "À la segmentation de l'œuf fécondé"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "La fécondation est :",
+                options: [
+                    "La division de l'œuf",
+                    "La fusion d'un spermatozoïde et d'un ovule",
+                    "La nidation du blastocyste",
+                    "La formation du placenta",
+                    "La première mitose de l'œuf"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "La nidation correspond à :",
+                options: [
+                    "La formation des gamètes",
+                    "L'implantation du blastocyste dans la muqueuse utérine",
+                    "La méiose des cellules germinales",
+                    "La production d'hormones sexuelles",
+                    "La segmentation de l'embryon"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les ovaires sont responsables de :",
+                options: [
+                    "La spermatogenèse",
+                    "La synthèse de bile",
+                    "La production d'ovules et d'hormones sexuelles féminines",
+                    "La production de globules rouges",
+                    "La filtration du sang"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "Le cycle menstruel est contrôlé principalement par :",
+                options: [
+                    "Le système nerveux autonome uniquement",
+                    "Les hormones sexuelles féminines (œstrogènes, progestérone)",
+                    "Les hormones thyroïdiennes",
+                    "Les hormones pancréatiques",
+                    "Les neurotransmetteurs de la moelle épinière"
+                ],
+                correctIndex: 1
+            }
+        ],
+        ecologie: [
+            {
+                text: "Un écosystème comprend :",
+                options: [
+                    "Uniquement les animaux",
+                    "Les êtres vivants et leur milieu physique",
+                    "Uniquement les végétaux",
+                    "Uniquement le sol",
+                    "Uniquement l'atmosphère"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les producteurs primaires sont :",
+                options: [
+                    "Les carnivores",
+                    "Les décomposeurs",
+                    "Les organismes autotrophes (végétaux chlorophylliens)",
+                    "Les herbivores",
+                    "Les omnivores"
+                ],
+                correctIndex: 2
+            },
+            {
+                text: "La biodiversité désigne :",
+                options: [
+                    "La quantité de dioxygène dans l'air",
+                    "La diversité des organismes vivants dans un milieu",
+                    "La composition chimique du sol",
+                    "La température d'un écosystème",
+                    "La taille des populations humaines"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les décomposeurs jouent un rôle essentiel dans :",
+                options: [
+                    "La production de lumière",
+                    "Le recyclage de la matière organique en éléments minéraux",
+                    "La photosynthèse",
+                    "La respiration des animaux",
+                    "La formation de nuages"
+                ],
+                correctIndex: 1
+            },
+            {
+                text: "Les activités humaines peuvent provoquer :",
+                options: [
+                    "Toujours une augmentation de la biodiversité",
+                    "Aucune modification des écosystèmes",
+                    "La pollution, la destruction d'habitats et la disparition d'espèces",
+                    "Uniquement une augmentation de la production primaire",
+                    "Uniquement des effets positifs sur les écosystèmes"
+                ],
+                correctIndex: 2
+            }
+        ]
+    };
+
+    // --- Logique d'affichage ---
+    const courseDiv = document.getElementById("course-content");
+    const questionsDiv = document.getElementById("questions-container");
+    const resultDiv = document.getElementById("result");
+    const scoreSpan = document.getElementById("score");
+    const detailsSpan = document.getElementById("details");
+    const checkBtn = document.getElementById("check-btn");
+    const resetBtn = document.getElementById("reset-btn");
+
+    let currentChapter = "cellule";
+
+    function renderCourse(chapter) {
+        courseDiv.innerHTML = courses[chapter] || "<p>Chapitre non disponible.</p>";
+    }
+
+    function renderQuestions(chapter) {
+        const questions = questionsBank[chapter] || [];
+        questionsDiv.innerHTML = "";
+        questions.forEach((q, index) => {
+            const qDiv = document.createElement("div");
+            qDiv.className = "question";
+            const qTitle = document.createElement("h4");
+            qTitle.textContent = `Q${index + 1}. ${q.text}`;
+            const info = document.createElement("small");
+            info.textContent = "QCU – une seule bonne réponse.";
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+
+            q.options.forEach((opt, optIndex) => {
+                const label = document.createElement("label");
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = `q-${chapter}-${index}`;
+                input.value = optIndex;
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            qDiv.appendChild(qTitle);
+            qDiv.appendChild(info);
+            qDiv.appendChild(optionsDiv);
+            questionsDiv.appendChild(qDiv);
+        });
+        resultDiv.classList.add("hidden");
+    }
+
+    // Initialisation
+    renderCourse(currentChapter);
+    renderQuestions(currentChapter);
+
+    // Changements de chapitre
+    document.querySelectorAll(".chapters-list button").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".chapters-list button").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentChapter = btn.dataset.chapter;
+            renderCourse(currentChapter);
+            renderQuestions(currentChapter);
+        });
+    });
+
+    // Correction
+    checkBtn.addEventListener("click", () => {
+        const questions = questionsBank[currentChapter] || [];
+        let score = 0;
+        let answered = 0;
+        let feedback = [];
+
+        questions.forEach((q, index) => {
+            const radios = document.querySelectorAll(`input[name="q-${currentChapter}-${index}"]`);
+            let chosen = null;
+            radios.forEach(r => {
+                if (r.checked) {
+                    chosen = parseInt(r.value, 10);
+                }
+            });
+            if (chosen !== null) {
+                answered++;
+                if (chosen === q.correctIndex) {
+                    score++;
+                    feedback.push(`Q${index + 1} : correct.`);
+                } else {
+                    feedback.push(
+                        `Q${index + 1} : faux. Bonne réponse : ${q.options[q.correctIndex]}`
+                    );
+                }
+            } else {
+                feedback.push(`Q${index + 1} : non répondue.`);
+            }
+        });
+
+        const total = questions.length;
+        const percent = total > 0 ? Math.round((score / total) * 100) : 0;
+
+        scoreSpan.textContent = `Score : ${score} / ${total} (${percent} %)`;
+        detailsSpan.innerHTML =
+            `Questions répondues : ${answered} / ${total}.<br>` +
+            feedback.map(f => "- " + f).join("<br>");
+
+        if (percent >= 80) {
+            scoreSpan.className = "ok";
+        } else {
+            scoreSpan.className = "bad";
+        }
+
+        resultDiv.classList.remove("hidden");
+    });
+
+    // Réinitialisation
+    resetBtn.addEventListener("click", () => {
+        document.querySelectorAll("input[type=radio]").forEach(r => (r.checked = false));
+        resultDiv.classList.add("hidden");
+    });
+</script>
+</body>
+</html>
